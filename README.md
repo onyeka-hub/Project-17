@@ -27,7 +27,7 @@ Tagging is a straightforward, but a very powerful concept that helps you manage 
 - You can easily determine resources that are not being used and take actions accordingly
 - If there are different teams in the organisation using the same account, tagging can help differentiate who owns which resources.
 
-**Note**: You can add multiple tags as a default set. for example, in out terraform.tfvars file we can have default tags defined.
+**Note**: You can add multiple tags as a default set. for example, in our terraform.tfvars file we can have default tags defined.
 
 ```
 tags = {
@@ -271,26 +271,25 @@ resource "aws_iam_policy" "policy" {
       Name =  "aws assume policy"
     },
   )
-
 }
 
 3. Attach the Policy to the IAM Role
 This is where, we will be attaching the policy which we created above, to the role we created in the first step.
 
 ```
-    resource "aws_iam_role_policy_attachment" "test-attach" {
-        role       = aws_iam_role.ec2_instance_role.name
-        policy_arn = aws_iam_policy.policy.arn
-    }
+resource "aws_iam_role_policy_attachment" "test-attach" {
+  role       = aws_iam_role.ec2_instance_role.name
+  policy_arn = aws_iam_policy.policy.arn
+}
 ```
 
 4. Create an Instance Profile and interpolate the IAM Role
 
 ```
-    resource "aws_iam_instance_profile" "ip" {
-        name = "aws_instance_profile_test"
-        role =  aws_iam_role.ec2_instance_role.name
-    }
+resource "aws_iam_instance_profile" "ip" {
+  name = "aws_instance_profile_test"
+  role =  aws_iam_role.ec2_instance_role.name
+}
 ```
 
 We are pretty much done with Identity and Management part for now, let us move on and create other resources required.
@@ -312,7 +311,7 @@ Let us create some Terraform configuration code to accomplish these tasks.
 
 ## CREATE SECURITY GROUPS
 
-We are going to create all the security groups in a single file, then we are going to refrence this security group within each resources that needs it.
+We are going to create all the security groups in a single file, then we are going to reference this security group within each resources that needs it.
 
 IMPORTANT:
 
@@ -545,7 +544,7 @@ resource "aws_security_group_rule" "inbound-mysql-webserver" {
 }
 ```
 
-**IMPORTANT NOTE**: We used the **aws_security_group_rule** to refrence another security group in a security group.
+**IMPORTANT NOTE**: We used the **aws_security_group_rule** to reference another security group in a security group.
 
 
 ## CREATE CERTIFICATE FROM AMAZON CERIFICATE MANAGER
@@ -554,7 +553,7 @@ Create **cert.tf** file and add the following code snippets to it.
 
 **NOTE**: Read Through to change the domain name to your own domain name and every other name that needs to be changed.
 
-Check out the terraform documentation for AWS Certifivate mangarer
+Check out the terraform documentation for AWS Certifivate manager
 
 ```
 # The entire section create a certiface, public zone, and validate the certificate using DNS method
@@ -622,7 +621,7 @@ resource "aws_route53_record" "wordpress" {
 }
 ```
 
-3. **Create an external (Internet facing) Application Load Balancer (ALB)**
+3. **Create an external Application Load Balancer (ALB)**
 
 Create a file called **alb.tf**
 
@@ -709,7 +708,7 @@ output "alb_target_group_arn" {
 }
 ```
 
-Create an Internal (Internal) Application Load Balancer (ALB)
+Create an Internal Application Load Balancer (ALB)
 For the Internal Load balancer we will fillow thje same concepts with the external load balancer.
 
 Add the code snippets inside the alb.tf file
@@ -825,11 +824,12 @@ resource "aws_lb_listener_rule" "tooling-listener" {
 ## CREATING AUSTOALING GROUPS
 
 This Section we will create the **Auto Scaling Group (ASG)**
+
 Now we need to configure our ASG to be able to scale the EC2s out and in depending on the application traffic.
 
 Before we start configuring an ASG, we need to create the launch template and the the AMI needed. For now we are going to use a random AMI from AWS, then in project 19, we will use Packer to create our ami.
 
-Based on our Architetcture we need for Auto Scaling Groups for bastion, nginx, wordpress and tooling, so we will create two files; asg-bastion-nginx.tf will contain Launch Template and Austoscaling froup for Bastion and Nginx, then asg-wordpress-tooling.tf will contain Launch Template and Austoscaling group for wordpress and tooling.
+Based on our Architetcture we need four Auto Scaling Groups for bastion, nginx, wordpress and tooling, so we will create two files; asg-bastion-nginx.tf will contain Launch Template and Austoscaling froup for Bastion and Nginx, then asg-wordpress-tooling.tf will contain Launch Template and Austoscaling group for wordpress and tooling.
 
 Useful Terraform Documentation, go through this documentation and understand the arguement needed for each resources:
 
@@ -1001,7 +1001,7 @@ resource "aws_autoscaling_group" "nginx-asg" {
 # attaching autoscaling group of nginx to external load balancer
 resource "aws_autoscaling_attachment" "asg_attachment_nginx" {
   autoscaling_group_name = aws_autoscaling_group.nginx-asg.id
-  alb_target_group_arn   = aws_lb_target_group.nginx-tgt.arn
+  lb_target_group_arn    = aws_lb_target_group.nginx-tgt.arn
 }
 ```
 
@@ -1076,7 +1076,7 @@ resource "aws_autoscaling_group" "wordpress-asg" {
 
 resource "aws_autoscaling_attachment" "asg_attachment_wordpress" {
   autoscaling_group_name = aws_autoscaling_group.wordpress-asg.id
-  alb_target_group_arn   = aws_lb_target_group.wordpress-tgt.arn
+  lb_target_group_arn    = aws_lb_target_group.wordpress-tgt.arn
 }
 
 # launch template for toooling
@@ -1147,7 +1147,7 @@ resource "aws_autoscaling_group" "tooling-asg" {
 
 resource "aws_autoscaling_attachment" "asg_attachment_tooling" {
   autoscaling_group_name = aws_autoscaling_group.tooling-asg.id
-  alb_target_group_arn   = aws_lb_target_group.tooling-tgt.arn
+  lb_target_group_arn    = aws_lb_target_group.tooling-tgt.arn
 }
 ```
 ### Create the scripts - bastion.sh, nginx.sh, wordpress.s and tooling.sh
