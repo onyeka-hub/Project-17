@@ -25,7 +25,7 @@ resource "aws_launch_template" "wordpress-launch-template" {
     tags = merge(
       var.tags,
       {
-        Name = format("%s-wordpress-lt", var.name)
+        Name = format("%s-%s", var.name, "wordpress-lt")
       },
     )
 
@@ -94,7 +94,7 @@ resource "aws_launch_template" "tooling-launch-template" {
     tags = merge(
       var.tags,
       {
-        Name = format("%s-tooling-lt", var.name)
+        Name = format("%s-%s", var.name, "tooling-lt")
       },
     )
 

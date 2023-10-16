@@ -5,7 +5,7 @@ resource "aws_route_table" "private-rtb" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-Private-Route-Table", var.name)
+      Name = format("%s-%s", var.name, "private-route-table")
     },
   )
 }
@@ -30,7 +30,7 @@ resource "aws_route_table" "public-rtb" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-Public-Route-Table", var.name)
+      Name = format("%s-%s", var.name, "publice-route-table")
     },
   )
 }

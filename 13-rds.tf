@@ -7,7 +7,7 @@ resource "aws_db_subnet_group" "onyi-rds" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-rds", var.name)
+      Name = format("%s-%s", var.name, "rds")
     },
   )
 }

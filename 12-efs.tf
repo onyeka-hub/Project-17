@@ -32,7 +32,7 @@ resource "aws_efs_file_system" "onyi-efs" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-efs", var.name)
+      Name = format("%s-%s", var.name, "efs")
     },
   )
 }
@@ -73,7 +73,7 @@ resource "aws_efs_access_point" "wordpress" {
   }
 
   tags = {
-    Name = format("%s-wordpress", var.name)
+    Name = format("%s-%s", var.name, "wordpress")
   }
 }
 
@@ -97,6 +97,6 @@ resource "aws_efs_access_point" "tooling" {
   }
 
   tags = {
-    Name = format("%s-tooling", var.name)
+    Name = format("%s-%s", var.name, "tooling")
   }
 }

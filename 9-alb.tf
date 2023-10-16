@@ -14,7 +14,7 @@ resource "aws_lb" "ext-alb" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-ext-alb", var.name)
+      Name = format("%s-%s", var.name, "ext-alb")
     },
   )
 
@@ -72,7 +72,7 @@ resource "aws_lb" "ialb" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-int-alb", var.name)
+      Name = format("%s-%s", var.name, "int-alb")
     },
   )
 

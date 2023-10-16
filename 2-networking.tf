@@ -10,7 +10,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = var.enable_dns_hostnames
 
   tags = {
-    Name = "onyi-vpc"
+    Name = format("%s-%s", var.name, "vpc")
   }
 }
 

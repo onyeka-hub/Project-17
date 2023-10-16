@@ -53,7 +53,7 @@ resource "aws_launch_template" "bastion-launch-template" {
     tags = merge(
       var.tags,
       {
-        Name = format("%s-bastion-lt", var.name)
+        Name = format("%s-%s", var.name, "baston-lt")
       },
     )
   }
@@ -114,7 +114,7 @@ resource "aws_launch_template" "nginx-launch-template" {
     tags = merge(
       var.tags,
       {
-        Name = format("%s-nginx-lt", var.name)
+        Name = format("%s-%s", var.name, "nginx-lt")
       },
     )
   }
